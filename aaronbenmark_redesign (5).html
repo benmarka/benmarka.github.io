@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aaron Benmark — Author</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;800&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0b08;
+    --parchment: #f5f0e8;
+    --bone: #e8e0d0;
+    --rust: #8b3a1a;
+    --gold: #c49a3c;
+    --gold-light: #e8c46a;
+    --shadow: #2a1a0e;
+    --muted: #6b5d4f;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--ink);
+    color: var(--parchment);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(to bottom, rgba(14,11,8,0.95) 0%, transparent 100%);
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+  .nav-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 65% 50%, rgba(139,58,26,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(196,154,60,0.06) 0%, transparent 60%),
+      linear-gradient(160deg, #1a0e06 0%, #0e0b08 40%, #080604 100%);
+  }
+
+  .hero-ornament {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 50%;
+    overflow: hidden;
+    opacity: 0.06;
+  }
+
+  .hero-ornament svg { width: 100%; height: 100%; }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8rem 3rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+
+  h1.hero-name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    color: var(--parchment);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  h1.hero-name em {
+    display: block;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 0.6em;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.3em;
+  }
+
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--bone);
+    opacity: 0.8;
+    margin: 1.5rem 0 2.5rem;
+    line-height: 1.6;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .hero-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .hero-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .hero-cta-secondary:hover { background: rgba(196,154,60,0.1); }
+
+  .hero-book {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .book-cover-wrapper {
+    position: relative;
+    width: 260px;
+  }
+  .book-cover-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border: 1px solid rgba(196,154,60,0.2);
+  }
+  .book-cover-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: 10%; right: 10%;
+    height: 40px;
+    background: radial-gradient(ellipse, rgba(196,154,60,0.2) 0%, transparent 70%);
+    filter: blur(8px);
+  }
+  .book-cover { width: 100%; display: block; box-shadow: -8px 12px 40px rgba(0,0,0,0.7); }
+
+  .book-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(196,154,60,0.4);
+    padding: 0.4rem 1rem;
+    background: rgba(196,154,60,0.05);
+  }
+
+  .ornamental-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    opacity: 0.25;
+  }
+  .ornamental-divider::before,
+  .ornamental-divider::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .ornamental-divider span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--gold);
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 30px; height: 1px;
+    background: var(--gold);
+  }
+
+  h2.section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 600;
+    color: var(--parchment);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .section-body {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--bone);
+    opacity: 0.85;
+    max-width: 600px;
+  }
+
+  .series-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 6rem;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  .series-spine {
+    position: relative;
+    padding-left: 2rem;
+    border-left: 1px solid rgba(196,154,60,0.2);
+  }
+
+  .series-book {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .series-book:last-child { border-bottom: none; margin-bottom: 0; }
+
+  .series-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.6;
+    white-space: nowrap;
+    padding-top: 0.3rem;
+    min-width: 60px;
+  }
+
+  .series-book-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--parchment);
+    margin-bottom: 0.4rem;
+  }
+
+  .series-book-info p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(196,154,60,0.3);
+    padding: 0.2rem 0.6rem;
+    margin-top: 0.6rem;
+  }
+
+  .series-upcoming { opacity: 0.4; }
+
+  .about-section {
+    background: linear-gradient(180deg, transparent 0%, rgba(139,58,26,0.04) 50%, transparent 100%);
+    border-top: 1px solid rgba(196,154,60,0.08);
+    border-bottom: 1px solid rgba(196,154,60,0.08);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  blockquote.pull-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1.5;
+    color: var(--parchment);
+    padding-left: 2rem;
+    border-left: 2px solid var(--gold);
+  }
+
+  .newsletter-section {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+    text-align: center;
+  }
+
+  .newsletter-section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--parchment);
+    margin-bottom: 1rem;
+  }
+
+  .newsletter-section p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .newsletter-form { display: flex; }
+
+  .newsletter-form input {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,154,60,0.25);
+    border-right: none;
+    color: var(--parchment);
+    padding: 0.9rem 1.2rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.9rem;
+    outline: none;
+  }
+  .newsletter-form input::placeholder { color: var(--muted); }
+  .newsletter-form input:focus { border-color: rgba(196,154,60,0.5); }
+
+  .newsletter-form button {
+    background: var(--gold);
+    border: none;
+    color: var(--ink);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.9rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .newsletter-form button:hover { background: var(--gold-light); }
+
+  footer {
+    border-top: 1px solid rgba(196,154,60,0.1);
+    padding: 2rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 0.6rem; }
+    .hero-content { grid-template-columns: 1fr; gap: 3rem; padding: 7rem 1.5rem 4rem; }
+    .hero-book { order: -1; }
+    .book-cover-wrapper { width: 180px; }
+    .series-grid { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+    .newsletter-section { padding: 4rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Aaron Benmark</a>
+  <ul class="nav-links">
+    <li><a href="#books">Books</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ornament">
+    <svg viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="0.6">
+      <rect x="200" y="800" width="200" height="20"/>
+      <rect x="220" y="120" width="160" height="680"/>
+      <rect x="170" y="100" width="260" height="30"/>
+      <rect x="150" y="70" width="300" height="35"/>
+      <path d="M 180 100 Q 300 40 420 100"/>
+      <path d="M 190 90 Q 300 30 410 90"/>
+      <line x1="240" y1="140" x2="240" y2="790"/>
+      <line x1="255" y1="140" x2="255" y2="790"/>
+      <line x1="270" y1="140" x2="270" y2="790"/>
+      <line x1="285" y1="140" x2="285" y2="790"/>
+      <line x1="300" y1="140" x2="300" y2="790"/>
+      <line x1="315" y1="140" x2="315" y2="790"/>
+      <line x1="330" y1="140" x2="330" y2="790"/>
+      <line x1="345" y1="140" x2="345" y2="790"/>
+      <line x1="360" y1="140" x2="360" y2="790"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Historical Fantasy &amp; Science Fiction</div>
+      <h1 class="hero-name">
+        <em>Stories by</em>
+        Aaron<br>Benmark
+      </h1>
+      <p class="hero-tagline">
+        Immortal narrators. The weight of centuries.<br>
+        Worlds where myth and history bleed together.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://www.amazon.com/Quantum-Entanglement-Aaron-Benmark-ebook/dp/B0CL4W2BY1" class="hero-cta" target="_blank">Buy Now</a>
+        <a href="#books" class="hero-cta-secondary">Explore Books</a>
+      </div>
+    </div>
+
+    <div class="hero-book">
+      <div class="book-cover-wrapper">
+        <img
+          src="https://images.squarespace-cdn.com/content/v1/66ff32d633563e40b8ee3328/26f2c3c0-56f0-4177-9f7b-a8c272aa2399/cover+%282%29.jpg"
+          alt="The Quantum Entanglement cover"
+          class="book-cover"
+        />
+      </div>
+      <div class="book-badge">✦ SPSFC Quarterfinalist 2026 ✦</div>
+    </div>
+  </div>
+</section>
+
+<div class="ornamental-divider"><span>✦</span></div>
+
+<!-- SERIES -->
+<section id="books">
+  <div class="series-grid">
+    <div>
+      <div class="section-label">Current Work</div>
+      <h2 class="section-title">Children<br>of the Wolf</h2>
+      <p class="section-body">
+        A twelve-book epic spanning a thousand years of Roman history, narrated by the immortal Remus — witness, survivor, and dark mirror to his brother's ambition. Beginning with Rome's founding and ending with its fall.
+      </p>
+
+    </div>
+
+    <div class="series-spine">
+      <div class="series-book">
+        <div class="series-number">Book I</div>
+        <div class="series-book-info">
+          <h3>Sins of the Palatine</h3>
+          <p>Romulus and Remus. Two immortal brothers. The story you all know. But what happens if Remus doesn't stay dead?</p>
+          <span class="tag">Coming Soon</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="ornamental-divider"><span>✦</span></div>
+
+<!-- QE FEATURE -->
+<div style="max-width: 1200px; margin: 0 auto; padding: 5rem 3rem;">
+  <div style="display: grid; grid-template-columns: auto 1fr; gap: 4rem; align-items: center;">
+    <img
+      src="https://images.squarespace-cdn.com/content/v1/66ff32d633563e40b8ee3328/72a5e015-2108-4bc3-ad67-591b6e4d4013/cover+%282%29.jpg"
+      alt="The Quantum Entanglement"
+      style="width: 180px; box-shadow: -6px 10px 30px rgba(0,0,0,0.6); display: block;"
+    />
+    <div>
+      <div class="section-label">Also Available</div>
+      <h2 class="section-title" style="font-size: clamp(1.5rem, 2.5vw, 2.2rem);">The Quantum<br>Entanglement</h2>
+      <p class="section-body" style="margin-bottom: 1.5rem;">
+        A dystopian science fiction novel set in a world where the Church of Science has supplanted religion — and controls everything. A SPSFC Quarterfinalist 2026.
+      </p>
+      <a href="https://www.amazon.com/Quantum-Entanglement-Aaron-Benmark-ebook/dp/B0CL4W2BY1" class="hero-cta" target="_blank">Buy on Amazon</a>
+    </div>
+  </div>
+</div>
+
+<div class="ornamental-divider"><span>✦</span></div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-grid">
+    <div>
+      <div class="section-label">About the Author</div>
+      <h2 class="section-title">Writing at the edge of myth and history</h2>
+      <p class="section-body" style="margin-bottom: 1.5rem;">
+        Aaron Benmark is a fiction writer working across historical fantasy and science fiction. His work is drawn to the long view — civilizations in motion, the weight of centuries, characters who survive long enough to see everything change.
+      </p>
+      <p class="section-body">
+        He is currently deep in the second volume of <em>Children of the Wolf</em>, his twelve-book Roman epic narrated by the immortal Remus.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="contact">
+  <div class="newsletter-section">
+    <div class="section-label" style="justify-content: center; margin-bottom: 1.5rem;">Stay in the World</div>
+    <h2>Join the Journey</h2>
+    <p>Updates on new releases, the Children of the Wolf series, and occasional dispatches from Roman history's stranger corners.</p>
+    <!-- MAILCHIMP: replace the action URL with yours from Mailchimp > Audience > Signup forms > Embedded forms -->
+    <form class="newsletter-form" action="https://YOURACCOUNTHERE.us1.list-manage.com/subscribe/post?u=XXXX&amp;id=XXXX" method="post" target="_blank" novalidate>
+      <input type="email" name="EMAIL" placeholder="your@email.com" required />
+      <div style="position:absolute;left:-5000px" aria-hidden="true">
+        <input type="text" name="b_XXXX_XXXX" tabindex="-1" value="">
+      </div>
+      <button type="submit">Subscribe</button>
+    </form>
+    <p style="font-size:0.75rem; opacity:0.45; margin-top:0.75rem;">No spam. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-name">© 2025 Aaron Benmark</span>
+  <ul class="footer-links">
+    <li><a href="https://www.goodreads.com/author/show/45444947.Aaron_Benmark" target="_blank">Goodreads</a></li>
+    <li><a href="https://www.amazon.com/stores/Aaron-Benmark/author/B0CLJQSC3F?ref=sr_ntt_srch_lnk_1&qid=1776709698&sr=8-1&shoppingPortalEnabled=true&ccs_id=4bb65c66-764c-49e8-a694-efd791d99e35" target="_blank">Amazon</a></li>
+    <li><a href="mailto:benmarkaa@gmail.com">Contact</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
