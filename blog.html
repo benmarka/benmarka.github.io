@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Aaron Benmark</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0b08;
+    --parchment: #f5f0e8;
+    --bone: #e8e0d0;
+    --rust: #8b3a1a;
+    --gold: #c49a3c;
+    --gold-light: #e8c46a;
+    --shadow: #2a1a0e;
+    --muted: #6b5d4f;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--ink);
+    color: var(--parchment);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(to bottom, rgba(14,11,8,0.97) 0%, rgba(14,11,8,0.0) 100%);
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+  .nav-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--gold-light); }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    position: relative;
+    padding: 10rem 3rem 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: 'BLOG';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cinzel', serif;
+    font-size: clamp(6rem, 14vw, 13rem);
+    font-weight: 800;
+    color: rgba(196,154,60,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.05em;
+  }
+
+  .page-header-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: fadeUp 0.7s ease both;
+  }
+  .page-header-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+
+  .page-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    color: var(--parchment);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .page-header-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--muted);
+    margin-top: 1rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  /* ── ORNAMENTAL DIVIDER ── */
+  .ornamental-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    opacity: 0.25;
+  }
+  .ornamental-divider::before,
+  .ornamental-divider::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .ornamental-divider span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--gold);
+  }
+
+  /* ── BLOG LAYOUT ── */
+  .blog-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 3rem 8rem;
+    align-items: start;
+  }
+
+  /* ── POST CARD ── */
+  .post-list { display: flex; flex-direction: column; gap: 0; }
+
+  .post-card {
+    padding: 3rem 0;
+    border-bottom: 1px solid rgba(196,154,60,0.1);
+    animation: fadeUp 0.6s ease both;
+  }
+  .post-card:first-child { padding-top: 0; }
+  .post-card:last-child { border-bottom: none; }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  .post-category {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid rgba(196,154,60,0.2);
+    padding: 0.15rem 0.5rem;
+  }
+
+  .post-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    color: var(--parchment);
+    line-height: 1.25;
+    margin-bottom: 0.8rem;
+    transition: color 0.2s;
+  }
+
+  .post-card h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .post-card h2 a:hover { color: var(--gold-light); }
+
+  .post-excerpt {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--bone);
+    opacity: 0.75;
+    max-width: 640px;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-read-more {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: gap 0.2s, color 0.2s;
+  }
+  .post-read-more::after {
+    content: '→';
+    transition: transform 0.2s;
+  }
+  .post-read-more:hover { color: var(--gold-light); gap: 0.8rem; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { display: flex; flex-direction: column; gap: 3rem; }
+
+  .sidebar-widget {
+    border: 1px solid rgba(196,154,60,0.1);
+    padding: 1.8rem;
+    background: rgba(196,154,60,0.02);
+  }
+
+  .sidebar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(196,154,60,0.15);
+  }
+
+  .sidebar-categories { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .sidebar-categories li a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sidebar-categories li a:hover { color: var(--gold); }
+  .sidebar-categories .count {
+    font-size: 0.55rem;
+    color: var(--gold);
+    opacity: 0.5;
+  }
+
+  .sidebar-recent { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .sidebar-recent li a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--bone);
+    text-decoration: none;
+    line-height: 1.4;
+    opacity: 0.75;
+    transition: opacity 0.2s, color 0.2s;
+    display: block;
+  }
+  .sidebar-recent li a:hover { opacity: 1; color: var(--gold-light); }
+  .sidebar-recent .recent-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    opacity: 0.5;
+    display: block;
+    margin-top: 0.2rem;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    padding: 4rem 0;
+    text-align: center;
+  }
+  .empty-glyph {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    color: var(--gold);
+    opacity: 0.2;
+    margin-bottom: 1.5rem;
+  }
+  .empty-state p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--muted);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(196,154,60,0.1);
+    padding: 2rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .blog-layout { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem 6rem; }
+    .sidebar { display: none; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 0.6rem; }
+    .page-header { padding: 8rem 1.5rem 3rem; }
+    .page-header::before { display: none; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Aaron Benmark</a>
+  <ul class="nav-links">
+    <li><a href="index.html#books">Books</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-eyebrow">Dispatches from the Long View</div>
+  <h1>The Journal</h1>
+  <p class="page-header-sub">On history, myth, writing, and the slow work of building worlds.</p>
+</header>
+
+<div class="ornamental-divider"><span>✦</span></div>
+
+<!-- MAIN CONTENT -->
+<div class="blog-layout">
+
+  <!-- POST LIST -->
+  <!-- ════════════════════════════════════════════════════════
+       HOW TO ADD A NEW POST:
+       Copy one of the .post-card blocks below and paste it
+       at the TOP of the post-list div (newest first).
+       Fill in: date, category, title, excerpt, and link.
+       For a full post, create a new file like post-001.html
+       and link the title + "Continue Reading" to it.
+  ════════════════════════════════════════════════════════ -->
+  <main class="post-list">
+
+    <!-- ── POST EXAMPLE 1 ── -->
+    <article class="post-card">
+      <div class="post-meta">
+        <span class="post-date">June 7, 2026</span>
+        <span class="post-category">Craft</span>
+      </div>
+      <h2><a href="#">What Remus Taught Me About Immortality as Punishment</a></h2>
+      <p class="post-excerpt">
+        Writing an immortal protagonist means confronting a question most fantasy avoids: what does it actually feel like to watch everyone you love turn to dust? Not as tragedy, but as the baseline condition of existence. Remus didn't teach me that immortality is a curse. He taught me it's a management problem.
+      </p>
+      <a href="#" class="post-read-more">Continue Reading</a>
+    </article>
+
+    <!-- ── POST EXAMPLE 2 ── -->
+    <article class="post-card">
+      <div class="post-meta">
+        <span class="post-date">May 22, 2026</span>
+        <span class="post-category">Roman History</span>
+      </div>
+      <h2><a href="#">The Gallic Sack and the Invention of Roman Shame</a></h2>
+      <p class="post-excerpt">
+        In 390 BC, Gauls sacked Rome and held the Capitol for months. Romans later turned this catastrophe into a foundational myth of national resilience — but the psychological reality was far stranger. A civilization deciding, in real time, how to narrate its own humiliation.
+      </p>
+      <a href="#" class="post-read-more">Continue Reading</a>
+    </article>
+
+    <!-- ── POST EXAMPLE 3 ── -->
+    <article class="post-card">
+      <div class="post-meta">
+        <span class="post-date">April 10, 2026</span>
+        <span class="post-category">Writing Life</span>
+      </div>
+      <h2><a href="#">On Writing a Twelve-Book Series Before Book One Is Out</a></h2>
+      <p class="post-excerpt">
+        Most writing advice assumes you'll write a book, see if it sells, then decide whether to write the next one. That's sensible. It's also completely incompatible with a story that spans a thousand years of Roman history with a single immortal narrator. Some bets you have to make early.
+      </p>
+      <a href="#" class="post-read-more">Continue Reading</a>
+    </article>
+
+    <!-- ══════════════════════════════════════════════
+         ADD NEW POSTS ABOVE THIS LINE (newest at top)
+    ══════════════════════════════════════════════ -->
+
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-widget">
+      <div class="sidebar-title">Categories</div>
+      <ul class="sidebar-categories">
+        <li><a href="#">Roman History <span class="count">1</span></a></li>
+        <li><a href="#">Craft <span class="count">1</span></a></li>
+        <li><a href="#">Writing Life <span class="count">1</span></a></li>
+        <li><a href="#">World Building <span class="count">0</span></a></li>
+        <li><a href="#">Reading <span class="count">0</span></a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-widget">
+      <div class="sidebar-title">Recent Posts</div>
+      <ul class="sidebar-recent">
+        <li>
+          <a href="#">What Remus Taught Me About Immortality as Punishment
+            <span class="recent-date">June 7, 2026</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">The Gallic Sack and the Invention of Roman Shame
+            <span class="recent-date">May 22, 2026</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">On Writing a Twelve-Book Series Before Book One Is Out
+            <span class="recent-date">April 10, 2026</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </aside>
+
+</div>
+
+<footer>
+  <span class="footer-name">© 2025 Aaron Benmark</span>
+  <ul class="footer-links">
+    <li><a href="https://www.goodreads.com/author/show/45444947.Aaron_Benmark" target="_blank">Goodreads</a></li>
+    <li><a href="https://www.amazon.com/stores/Aaron-Benmark/author/B0CLJQSC3F" target="_blank">Amazon</a></li>
+    <li><a href="mailto:benmarkaa@gmail.com">Contact</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
